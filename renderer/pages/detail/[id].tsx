@@ -1,12 +1,13 @@
-// import { NextPageContext } from 'next'
+import type {ReactElement} from 'react';
+import type {GetStaticPaths, GetStaticProps} from 'next';
+
 import Layout from '../../components/Layout';
-import {User} from '../../interfaces';
+import type {User} from '../../interfaces';
 import {findAll, findData} from '../../utils/sample-api';
 import ListDetail from '../../components/ListDetail';
-import {GetStaticPaths, GetStaticProps} from 'next';
 
 type Params = {
-    id?: string;
+    id: string;
 };
 
 type Props = {
@@ -14,12 +15,12 @@ type Props = {
     errors?: string;
 };
 
-const InitialPropsDetail = ({item, errors}: Props) => {
+const InitialPropsDetail = ({item, errors}: Props): ReactElement => {
     if (errors) {
         return (
-            <Layout title={`Error | Next.js + TypeScript + Electron Example`}>
+            <Layout title="Error | Next.js + TypeScript + Electron Example">
                 <p>
-                    <span style={{color: 'red'}}>Error:</span> {errors}
+                    <span style={{color: 'red'}}>{'Error:'}</span> {errors}
                 </p>
             </Layout>
         );
@@ -32,29 +33,35 @@ const InitialPropsDetail = ({item, errors}: Props) => {
     );
 };
 
-export const getStaticPaths: GetStaticPaths = async () => {
-    const items: User[] = await findAll();
+const getStaticPaths: GetStaticPaths = () => {
+    const items: User[] = findAll();
     const paths = items.map((item) => `/detail/${item.id}`);
-    return {paths, fallback: false};
+
+    return {
+        fallback: false,
+        paths,
+    };
 };
 
-export const getStaticProps: GetStaticProps = async ({params}) => {
+const getStaticProps: GetStaticProps = ({params}) => {
     const {id} = params as Params;
 
     try {
-        const item = await findData(Array.isArray(id) ? id[0] : id);
+        const item = findData(id);
+
         return {
             props: {
                 item,
             },
         };
-    } catch (err) {
+    } catch (error) {
         return {
             props: {
-                errors: err.message,
+                errors: error instanceof Error ? error.message : '`getStaticProps` error',
             },
         };
     }
 };
 
 export default InitialPropsDetail;
+export {getStaticPaths, getStaticProps};

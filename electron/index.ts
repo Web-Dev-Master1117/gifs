@@ -1,24 +1,23 @@
-// Native
 import {join} from 'path';
 import {format} from 'url';
+import type {IpcMainEvent} from 'electron';
+import {BrowserWindow, app, ipcMain} from 'electron';
 
-// Packages
-import {BrowserWindow, app, ipcMain, IpcMainEvent} from 'electron';
 import isDev from 'electron-is-dev';
 import prepareNext from 'electron-next';
 
 // Prepare the renderer once the app is ready
-app.on('ready', async () => {
+app.on('ready', async (): Promise<void> => {
     await prepareNext('./renderer');
 
     const mainWindow = new BrowserWindow({
-        width: 800,
         height: 600,
         webPreferences: {
-            nodeIntegration: false,
             contextIsolation: false,
+            nodeIntegration: false,
             preload: join(__dirname, 'preload.js'),
         },
+        width: 800,
     });
 
     const url = isDev
@@ -29,14 +28,17 @@ app.on('ready', async () => {
               slashes: true,
           });
 
-    mainWindow.loadURL(url);
+    await mainWindow.loadURL(url);
 });
 
 // Quit the app once all windows are closed
 app.on('window-all-closed', app.quit);
 
 // listen the channel `message` and resend the received message to the renderer process
-ipcMain.on('message', (event: IpcMainEvent, message: any) => {
+ipcMain.on('message', (event: IpcMainEvent, message: string) => {
+    // eslint-disable-next-line no-console
     console.log(message);
-    setTimeout(() => event.sender.send('message', 'hi from electron'), 500);
+    setTimeout(() => {
+        event.sender.send('message', 'hi from electron');
+    }, 500);
 });

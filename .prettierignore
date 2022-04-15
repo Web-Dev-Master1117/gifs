@@ -1,2 +1,5 @@
+dist
+main
 package-lock.json
 renderer/.next
+renderer/out

@@ -4,10 +4,11 @@
         "alwaysStrict": true,
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
+        "incremental": true,
         "isolatedModules": true,
         "jsx": "preserve",
-        "lib": ["dom", "es2017"],
-        "module": "commonjs",
+        "lib": ["dom", "dom.iterable", "esnext"],
+        "module": "esnext",
         "moduleResolution": "node",
         "noEmit": false,
         "noFallthroughCasesInSwitch": true,
@@ -20,5 +21,5 @@
         "outDir": "../main"
     },
     "exclude": ["node_modules"],
-    "include": ["**/*.ts", "**/*.tsx", "**/*.js"]
+    "include": ["next-env.d.ts", "**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"]
 }

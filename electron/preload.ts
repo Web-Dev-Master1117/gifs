@@ -1,8 +1,9 @@
-/* eslint-disable @typescript-eslint/no-namespace */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import {ipcRenderer, IpcRenderer} from 'electron';
+import type {IpcRenderer} from 'electron';
+import {ipcRenderer} from 'electron';
+import process from 'process';
 
 declare global {
+    // eslint-disable-next-line no-inner-declarations,no-var,vars-on-top
     var ipcRenderer: IpcRenderer;
 }
 
