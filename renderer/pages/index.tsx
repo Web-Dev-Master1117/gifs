@@ -1,6 +1,6 @@
-import type {IpcRenderer} from 'electron';
+import type {IpcRenderer, IpcRendererEvent} from 'electron';
 
-import type {ReactElement} from 'react';
+import type {EffectCallback, ReactElement} from 'react';
 import {useEffect} from 'react';
 import Link from 'next/link';
 
@@ -16,12 +16,18 @@ const onSayHiClick = (): void => {
 };
 
 const IndexPage = (): ReactElement => {
-    useEffect(() => {
-        // add a listener to 'message' channel
-        global.ipcRenderer.addListener('message', (_event, args) => {
+    useEffect((): ReturnType<EffectCallback> => {
+        const onMessage = (_event: IpcRendererEvent, args: string): void => {
             // eslint-disable-next-line no-alert
             alert(args);
-        });
+        };
+
+        // add a listener to 'message' channel
+        global.ipcRenderer.addListener('message', onMessage);
+
+        return (): void => {
+            global.ipcRenderer.removeListener('message', onMessage);
+        };
     }, []);
 
     return (

@@ -5,9 +5,10 @@
     "main": "main/index.js",
     "productName": "ElectronTypescriptNext",
     "scripts": {
-        "build": "npm run build-renderer && npm run build-electron",
+        "build": "npm run clean && npm run build-renderer && npm run build-electron",
         "build-electron": "tsc -p electron",
         "build-renderer": "next build renderer && next export renderer",
+        "clean": "rimraf dist main renderer/.next renderer/out",
         "check": "npm-check -u",
         "dev": "npm run build-electron && electron .",
         "dist": "npm run build && electron-builder",
@@ -17,7 +18,7 @@
         "prettier": "prettier --write --ignore-unknown .",
         "prettier:check": "prettier --check --ignore-unknown .",
         "test": "npm run lint && npm run type-check && npm run prettier:check",
-        "type-check": "tsc"
+        "type-check": "tsc -p ./renderer/tsconfig.json && tsc -p ./electron/tsconfig.json"
     },
     "git": {
         "pre-commit": "lint-staged"
@@ -26,7 +27,6 @@
         "*": "prettier --write --ignore-unknown"
     },
     "dependencies": {
-        "electron": "18.0.4",
         "electron-is-dev": "2.0.0",
         "electron-next": "3.1.5",
         "next": "12.1.5",
@@ -34,17 +34,19 @@
         "react-dom": "18.0.0"
     },
     "devDependencies": {
-        "@types/node": "17.0.24",
+        "@types/node": "17.0.25",
         "@types/react": "18.0.5",
         "@types/react-dom": "18.0.1",
         "@vercel/git-hooks": "1.0.0",
+        "electron": "18.0.4",
         "electron-builder": "23.0.3",
-        "eslint": "8.7.0",
-        "eslint-config-get-off-my-lawn": "7.0.5",
-        "lint-staged": "12.3.8",
+        "eslint": "8.13.0",
+        "eslint-config-get-off-my-lawn": "7.1.0",
+        "lint-staged": "12.4.0",
         "npm-check": "5.9.2",
         "prettier": "2.6.2",
         "prettier-config-get-off-my-lawn": "1.0.0",
+        "rimraf": "3.0.2",
         "typescript": "4.6.3"
     },
     "build": {

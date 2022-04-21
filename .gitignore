@@ -1,4 +1,5 @@
 *.log
+**/tsconfig.tsbuildinfo
 .DS_Store
 dist
 main

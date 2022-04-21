@@ -1,4 +1,9 @@
 {
+    "compilerOptions": {
+        "module": "commonjs",
+        "noEmit": false,
+        "outDir": "../main"
+    },
     "extends": "../tsconfig.json",
-    "include": ["**/*.ts"]
+    "include": ["**/*.js", "**/*.d.ts", "**/*.ts", "**/*.tsx"]
 }
